@@ -1,0 +1,21 @@
+<html ng-app="Bookmarks">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>My Bookmarks</title>
+    <link rel="stylesheet" href="/static/css/index.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script type="text/javascript" src="/static/js/AppController.js"></script>
+  </head>
+  <body ng-controller="AppController">
+    <div class="container">
+      <div class="nav-bar clearfix">
+	<div class="nav-link nav-branding"><a href="/">Bookmarks</a></div>
+	<div class="links-container">
+	  <div class="nav-link nav-signup"><a href="/#/signup">Sign up!</a></div>
+	  <div class="nav-link nav-login"><a href="/#/login">Login</a></div>
+	</div>
+      </div>
+    <div ng-view></div>
+    </div> <!-- end container -->
+  </body>
+</html>

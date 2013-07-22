@@ -3,14 +3,9 @@ var redis = require('redis');
 var client = redis.createClient();
 var bcrypt = require('bcrypt');
 var crypto = require('crypto');
-var cons = require('consolidate');
-var swig = require('swig');
+//var cons = require('consolidate');
 var path = require('path');
 
-swig.init({
-  root: __dirname,
-  allowError: true,
-});
 
 client.select(1,function(){
   console.log("REDIS: db 1 select");
@@ -21,25 +16,21 @@ app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.session({secret:'vaibhav'}));
 app.use('/static',express.static(__dirname+'/static'));
-app.use('/styles',express.static(__dirname+'/static/styles'));
 
-app.engine('.html',cons.swig);
-app.set('views', path.join(__dirname,'views'));
-app.set('view engine','html');
 
 app.get('/',function(req,res) {
-  res.render('index.html',{});
-});
+  res.redirect('static/index.htm',{});
+}); 
 
 app.get('/signup',function(req,res){
-  res.render('newUser.html',{});
+  res.render('signup.htm',{});
 });
 
-app.get('/login',function(req,res){
-  res.render('login.html',{})
-});
+/*app.get('/login',function(req,res){
+  res.render('login.htm',{})
+});*/
 
-app.post('/addUser',function(req,res){
+app.post('/users/',function(req,res){
   var userid = req.body.txtUsername;
   var password= req.body.txtPassword;
   var name= req.body.txtName;
@@ -87,7 +78,7 @@ app.post('/addUser',function(req,res){
   });
 });
 
-app.post('/verifyUser',function(req,res){
+app.post('/login',function(req,res){
   var username = req.body.txtUsername;
   var password= req.body.txtPassword;
 
@@ -133,9 +124,12 @@ app.post('/verifyUser',function(req,res){
 
 app.get('/checkUser',function(req,res){
   var sid = req.cookies.sid;
+  console.log("sid from cookie : "+sid);
   client.hexists('session',sid,function(err,obj){
-    if(obj)
+    if(obj){
+      var response_JSON = {};
       res.send("Logged in");
+    }
     else
       res.send("Invalid");
   });
@@ -190,7 +184,7 @@ app.get(/^\/add\/(.*)$/,function(req,res){
   }
 });
 
-app.get('/list',function(req,res){
+app.get('/bookmarks',function(req,res){
   var sid = req.cookies.sid;
   var u_id= req.session.user_id;
   var ar_uid = u_id.split(":");
@@ -221,14 +215,15 @@ app.get('/list',function(req,res){
                 res.send("error while fetching links");
               }
               else{
-                var lst = "";
+		var JSON_response = {};
+		JSON_repsonse.data = {'urls': obj};
+		res.writeHead(200, {'Content-Type': 'application/json'});
+		res.write(JSON.stringify(JSON_response));
+		res.end();
+                /*var lst = "";
                 for(var i=0;i<obj.length;i++)
-                  lst += "<a href=\""+obj[i]+"\">"+obj[i]+"</a><hr /><br />";
+                  lst += "<a href=\""+obj[i]+"\">"+obj[i]+"</a><hr /><br />";*/
                 //res.send(lst);
-                res.render('list.html',{
-                  username: uname,
-                  links: obj,
-                });
               }
             });
           }
