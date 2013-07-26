@@ -1,0 +1,23 @@
+{
+  "name": "Bookmarks",
+  "version": "0.0.1-1",
+  "author": "trojanware",
+  "description": "A web application to store bookmarks online",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/trojanware/bookmarks-node.git"
+  },
+  "dependencies": {
+    "express": "3.x",
+    "bcrypt": "*",
+    "connect-mongo": "*",
+    "mongojs": "*"
+  },
+  "subdomain": "trojanware-bookmarks-node",
+  "scripts": {
+    "start": "app.js"
+  },
+  "engines": {
+    "node": "0.8.x"
+  }
+}
