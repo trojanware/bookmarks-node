@@ -2,7 +2,7 @@ var express = require('express');
 var bcrypt = require('bcrypt');
 var crypto = require('crypto');
 var https = require('https');
-var request = require('request');
+//var request = require('request');
 
 var app = express();
 var MongoStore = require('connect-mongo')(express);
@@ -43,6 +43,9 @@ app.post('/users/', function(request, response){
   };
   https.get(options, function(res){
     console.log(res.statusCode);
+    if(res.statusCode >= 300 && res.statusCode < 400){
+	response.redirect(res.headers.location);
+    }
     res.on('data', function(chunk){
       data += chunk;
     });
