@@ -1,6 +1,8 @@
 var express = require('express');
 var bcrypt = require('bcrypt');
 var crypto = require('crypto');
+var https = require('https');
+var request = require('request');
 
 var app = express();
 var MongoStore = require('connect-mongo')(express);
@@ -20,12 +22,39 @@ app.get('/', function(request, response){
 });
 
 //For adding a new user to the DB
+app.get('/st1', function(request, response){
+  console.log('st1 : '+request.query);
+  response.send('');
+});
 app.post('/users/', function(request, response){
   user_id = request.body.txtUsername;
   password = request.body.txtPassword;
   name = request.body.txtName;
+  var data = "";
+  /*request.get('https://accounts.google.com/o/oauth2/auth?client_id=978616694462.apps.googleusercontent.com&response_type=code&scope=email%20openid&redirect_uri=https://trojanware-bookmarks-node.nodejitsu.com/st1&state=1223', function(error, response, body){
+      console.log(body);
+  })*/
 
-  db.Users.find({user_id: user_id}, function(err, user){
+  var options = {
+    host: "accounts.google.com",
+    port: 443,
+    path: "/o/oauth2/auth?client_id=978616694462.apps.googleusercontent.com&response_type=code&scope=email%20openid&redirect_uri=https://trojanware-bookmarks-node.nodejitsu.com/st1&state=1223",
+    method: "GET"
+  };
+  https.get(options, function(res){
+    console.log(res.statusCode);
+    res.on('data', function(chunk){
+      data += chunk;
+    });
+    res.on('end', function(){
+      console.log(data);
+    });
+  }).on('error', function(e){
+    console.log(e);
+  });
+  //response.end('done');
+
+  /*db.Users.find({user_id: user_id}, function(err, user){
     console.log('userod : '+user_id);
     if(err || !user){
       response.writeHead(500);
@@ -52,7 +81,7 @@ app.post('/users/', function(request, response){
 	});
       }
     }
-  });
+  });*/
 });
 
 function addUser(user_id, password, hash){
