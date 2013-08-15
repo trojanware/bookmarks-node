@@ -24,7 +24,7 @@ app.get('/', function(request, response){
 //For adding a new user to the DB
 app.get('/st1', function(request, response){
   console.log('st1 : '+request.query);
-  response.send('');
+  response.send(''+request.query.code);
 });
 app.post('/users/', function(request, response){
   user_id = request.body.txtUsername;
