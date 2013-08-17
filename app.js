@@ -24,33 +24,48 @@ app.get('/', function(request, response){
 
 //For adding a new user to the DB
 app.get('/st2', function(request, response){
-    response.send(request.query);
+    console.log("called st2");
+    response.end(request.query);
 });
 app.get('/st1', function(request, response){
   console.log('st1 : '+request.query);
+  var data = '';
   if(request.query.code != "undefined"){
+      console.log("code found");
       var post_data = querystring.stringify({
 	  'code': request.query.code,
-	  'cliend_id': '978616694462.apps.googleusercontent.com',
+	  'client_id': '978616694462.apps.googleusercontent.com',
 	  'client_secret': '6gAl6DTmllTdhukvEBGkX2a9',
-	  'grant_type': 'authorization_code',
-	  'redirect_uri': 'https://trojanware-bookmarks-node.nodejitsu.com/st2'
+	  'redirect_uri': 'https://trojanware1-bookmarks-node.nodejitsu.com/st2',
+	  'grant_type': 'authorization_code'
       });
+      console.log('post_data : '+post_data);
       var options = {
 	host: "accounts.google.com",
 	port: 443,
-	path: "/o/oauth2/auth?client_id=978616694462.apps.googleusercontent.com&response_type=code&scope=email%20openid&redirect_uri=https://trojanware-bookmarks-node.nodejitsu.com/st1&state=1223",
+	path: "/o/oauth2/token",
 	method: "POST",
-	data: post_data
+	headers: {
+	    'Content-Type': 'application/x-www-form-urlencoded'
+	}
       };
-      https.post(options, function(res) {
-	    res.on('end', function(){
-	      console.log(data);
+      console.log("making query");
+      var post_req = https.request(options, function(res) {
+	    res.on('data', function(chunk){
+		console.log("got data : "+chunk);
+		data += chunk;
 	    });
+	    /*res.on('end', function(){
+		response.send(data);
+	    });*/
 	  }).on('error', function(e){
-	    console.log(e);
+	      response.send('error : '+e);
 	  });
-      });
+	  post_req.write(post_data);
+	  post_req.end();
+  }
+  else{
+      response.send("no code");
   }
 });
 app.post('/users/', function(request, response){
@@ -65,11 +80,10 @@ app.post('/users/', function(request, response){
   var options = {
     host: "accounts.google.com",
     port: 443,
-    path: "/o/oauth2/auth?client_id=978616694462.apps.googleusercontent.com&response_type=code&scope=email%20openid&redirect_uri=https://trojanware-bookmarks-node.nodejitsu.com/st1&state=1223",
+    path: "/o/oauth2/auth?client_id=978616694462.apps.googleusercontent.com&response_type=code&scope=email%20openid&redirect_uri=https://trojanware1-bookmarks-node.nodejitsu.com/st1&state=1223",
     method: "GET"
   };
   https.get(options, function(res){
-    console.log(res.statusCode);
     if(res.statusCode >= 300 && res.statusCode < 400){
 	response.redirect(res.headers.location);
     }
@@ -77,7 +91,7 @@ app.post('/users/', function(request, response){
       data += chunk;
     });
     res.on('end', function(){
-      console.log(data);
+      console.log('end');
     });
   }).on('error', function(e){
     console.log(e);

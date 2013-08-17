@@ -1,6 +1,6 @@
 {
-  "name": "Bookmarks",
-  "version": "0.0.1-7",
+  "name": "bookmarks",
+  "version": "0.0.1-36",
   "author": "trojanware",
   "description": "A web application to store bookmarks online",
   "repository": {
@@ -14,7 +14,7 @@
     "mongojs": "*",
     "follow-redirects": "*"
   },
-  "subdomain": "trojanware-bookmarks-node",
+  "subdomain": "trojanware1-bookmarks-node",
   "scripts": {
     "start": "app.js"
   },
