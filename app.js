@@ -91,13 +91,13 @@ app.post('/saveToken', function(request, response) {
       response.send("no code");
   }
 });*/
-app.post('/users/', function(request, response){
-    name = request.body.txtName;
+app.get('/login', function(request, response){
+    //name = request.body.txtName;
     var data = "";
     var options = {
 	'host': 'accounts.google.com',
 	'port': 443,
-	'path': '/o/oauth2/auth?response_type=token&client_id=978616694462.apps.googleusercontent.com&redirect_uri=https://trojanware1-bookmarks-node.nodejitsu.com/st2&scope=email&state=name:'+name,
+	'path': '/o/oauth2/auth?response_type=token&client_id=978616694462.apps.googleusercontent.com&redirect_uri=https://trojanware1-bookmarks-node.nodejitsu.com/st2&scope=email&state=1',
 	'method': 'GET'
     };
     var data = '';

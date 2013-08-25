@@ -1,0 +1,20 @@
+<html>
+    <head>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script type="text/javascript">
+	var url = window.location.href;
+	var hash = url.split('#')[1];
+	var data = hash.split('&');
+	var obj_data = {};
+	for(i=0; i<data.length; i++){
+	    tup = data[i].split('=');
+	    obj_data[tup[0]] = tup[1];
+	}
+	var token = obj_data.access_token;
+	var name = obj_data.state.split(':')[1];
+	$.post('/saveToken', {'token': token, 'name': name}, function(){});
+    </script>
+    </head>
+    <body>
+    </body>
+</html>
